@@ -1,5 +1,9 @@
 import styled from "styled-components";
 
+interface SelectButtonProps {
+  isSelected: boolean;
+}
+
 export const TipSelection = styled.div`
     padding-top:1rem;
     padding-left:10px;
@@ -8,14 +12,15 @@ export const TipSelection = styled.div`
     justify-content: space-between;
 `
 
-export const SelectButton= styled.button`
+export const SelectButton= styled.button<SelectButtonProps>`
     width: 5rem;
     height:2.5rem;
     margin-bottom: 10px;
     padding: 10px 0;
     border: none;
     border-radius: 5px;
-    background-color: #00474b;
+    background-color: ${({ isSelected, theme }) =>
+      isSelected ? theme.colors.background : theme.colors.primary};
     color: #ffffff;
     font-size: 18px;
     cursor: pointer;

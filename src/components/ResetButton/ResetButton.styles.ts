@@ -12,8 +12,8 @@ export const Button=styled.button`
     padding:10px;
     border: none;
     border-radius: 5px;
-    background-color: #26c0ab;
-    color: #00474b;
+    background-color: ${(props) => props.theme.colors.background};
+    color:${(props) => props.theme.colors.primary};
     font-size: 18px;
     cursor: pointer;
     margin:5%;
