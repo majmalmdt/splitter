@@ -29,11 +29,10 @@ const TipSelector: React.FC<PropsType> = ({ onChange, value }) => {
     <TipSelection>
       {percentages.map((item, index) => (
         <SelectButton
+          type="button"
           key={index}
           onClick={() => onChange(item)}
-          style={{
-            backgroundColor: item === value ? "#69D2E7" : "",
-          }}
+          isSelected={item === value}
         >
           {item}%
         </SelectButton>

@@ -19,8 +19,8 @@ export const SelectButton= styled.button<SelectButtonProps>`
     padding: 10px 0;
     border: none;
     border-radius: 5px;
-    background-color: ${({ isSelected, theme }) =>
-      isSelected ? theme.colors.background : theme.colors.primary};
+    background-color: ${(props) =>
+      props.isSelected ? props.theme.colors.background : props.theme.colors.primary};
     color: #ffffff;
     font-size: 18px;
     cursor: pointer;

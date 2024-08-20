@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Container,
   Input,
@@ -13,7 +12,7 @@ type PropsType = {
   labelText: string;
   type?: string;
   icon?: string;
-  onChange?: (value: number) => void;
+  onChange: (value: number | null) => void;
   error?: string;
   value: number;
 };
@@ -24,17 +23,8 @@ const InputField: React.FC<PropsType> = ({
   icon,
   onChange,
   value,
+  error,
 }) => {
-  const [error, setError] = useState("");
-  const handleChange = (value: number) => {
-    if (value === 0) {
-      setError("Can't be zero");
-      onChange?.(0);
-    } else {
-      onChange?.(value);
-      setError("");
-    }
-  };
   return (
     <Container>
       <TextContainer>
@@ -50,10 +40,11 @@ const InputField: React.FC<PropsType> = ({
         <Input
           type={type}
           hasIcon={!!icon}
-          onChange={(e) =>
-            handleChange(e.target.value === "" ? 0 : Number(e.target.value))
-          }
-          value={value ? value : ""}
+          hasError={!!error}
+          onChange={(e) => {
+            onChange(e.target.value ? Number(e.target.value) : null);
+          }}
+          value={value ? value : value === 0 ? 0 : ""}
         />
       </InputWrapper>
     </Container>

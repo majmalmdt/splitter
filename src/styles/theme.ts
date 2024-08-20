@@ -7,6 +7,7 @@ export const theme: DefaultTheme = {
     secondary: '#69D2E7',
     background: '#B3E4E5',
     text: '#FFF',
+    error: '#e17052'
   },
 };
 

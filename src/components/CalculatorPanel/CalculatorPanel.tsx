@@ -14,7 +14,6 @@ interface CalcValues {
   totalAmount: number;
 }
 
-// Define the default values using the interface
 const defaultValues: CalcValues = {
   billAmount: 0,
   noOfPeople: 0,
@@ -25,63 +24,79 @@ const defaultValues: CalcValues = {
 
 const CalculatorPanel = () => {
   const [calcValues, setCalcValues] = useState<CalcValues>(defaultValues);
+  const [errors, setErrors] = useState<{
+    billAmount?: string;
+    noOfPeople?: string;
+  }>({});
 
-  const setBillAmount = (amount: number) => {
-    setCalcValues({ ...calcValues, billAmount: amount });
+  const validateField = (field: keyof CalcValues, value: number | null) => {
+    const errorMessage = value === 0 ? "Can't be Zero" : "";
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [field]: errorMessage,
+    }));
   };
 
-  const setNoOfPeople = (number: number) => {
-    setCalcValues({ ...calcValues, noOfPeople: number });
+  const handleInputChange = (field: keyof CalcValues, value: number | null) => {
+    validateField(field, value);
+    setCalcValues((prevValues) => ({
+      ...prevValues,
+      [field]: value,
+    }));
   };
-
-  const setTipPercent = (value: number) => {
-    setCalcValues({ ...calcValues, tipPercent: value });
-  };
-
   const resetValues = () => {
     setCalcValues(defaultValues);
+    setErrors({});
   };
 
   useEffect(() => {
     if (
-      calcValues.noOfPeople &&
-      calcValues.billAmount &&
-      calcValues.tipPercent
+      calcValues.noOfPeople > 0 &&
+      calcValues.billAmount > 0 &&
+      calcValues.tipPercent >= 0
     ) {
       const tipAmount =
         ((calcValues.tipPercent / 100) * calcValues.billAmount) /
         calcValues.noOfPeople;
-      setCalcValues({
-        ...calcValues,
+      setCalcValues((prevValues) => ({
+        ...prevValues,
         tipAmount: tipAmount,
         totalAmount: calcValues.billAmount / calcValues.noOfPeople + tipAmount,
-      });
+      }));
     }
   }, [calcValues.noOfPeople, calcValues.tipPercent, calcValues.billAmount]);
 
   return (
-    <Container>
-      <LeftPanel>
-        <InputField
-          labelText={"Bill"}
-          icon={dollarIcon}
-          onChange={setBillAmount}
-          value={calcValues.billAmount}
-        />
-        <TipSelector onChange={setTipPercent} value={calcValues.tipPercent} />
-        <InputField
-          labelText={"Number of People"}
-          icon={dollarIcon}
-          onChange={setNoOfPeople}
-          value={calcValues.noOfPeople}
-        />
-      </LeftPanel>
-      <RightPanel>
-        <ResultText heading="Tip Amount" amount={calcValues.tipAmount} />
-        <ResultText heading="Total" amount={calcValues.totalAmount} />
-        <ResetButton onClick={resetValues} />
-      </RightPanel>
-    </Container>
+    <form>
+      <Container>
+        <LeftPanel>
+          <InputField
+            labelText={"Bill"}
+            icon={dollarIcon}
+            onChange={(value) => handleInputChange("billAmount", value)}
+            value={calcValues.billAmount}
+            error={errors.billAmount}
+          />
+          <TipSelector
+            onChange={(value) => handleInputChange("tipPercent", value)}
+            value={calcValues.tipPercent}
+          />
+          <InputField
+            labelText={"Number of People"}
+            icon={dollarIcon}
+            onChange={(value) => handleInputChange("noOfPeople", value)}
+            value={calcValues.noOfPeople}
+            error={errors.noOfPeople}
+          />
+        </LeftPanel>
+        <RightPanel>
+          <ResultText heading="Tip Amount" amount={calcValues.tipAmount} />
+          <ResultText heading="Total" amount={calcValues.totalAmount} />
+          <ResetButton onClick={resetValues} />
+        </RightPanel>
+      </Container>
+    </form>
   );
 };
+
 export default CalculatorPanel;

@@ -31,11 +31,11 @@ export const IconWrapper = styled.div`
   }
 `;
 
-export const Input = styled.input<{ hasIcon: boolean }>`
+export const Input = styled.input<{ hasIcon: boolean, hasError:boolean }>`
   width: 100%;
-  padding: ${({ hasIcon }) => (hasIcon ? "10px 10px 10px 36px" : "10px")};
+  padding: ${(props) => (props.hasIcon ? "10px 10px 10px 36px" : "10px")};
   font-size: 16px;
-  border: 2px solid #f3f9fa;
+  border: 2px solid ${(props)=>(props.hasError? props.theme.colors.error: "#f3f9fa")};
   color:  ${(props) => props.theme.colors.primary};
   font-weight: bolder;
   border-radius: 4px;
@@ -48,12 +48,12 @@ export const Input = styled.input<{ hasIcon: boolean }>`
     }
 
   &:focus {
-    border-color: ${(props) => props.theme.colors.secondary};
+    border-color: ${(props)=>(props.hasError? props.theme.colors.error: props.theme.colors.secondary)};
   }
 `;
 
 export const ErrorText= styled.div`
-    color: #e17052;
+    color: ${(props) => props.theme.colors.error};
     font-size: 12px;
 `
 
